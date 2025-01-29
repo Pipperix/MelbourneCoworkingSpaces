@@ -1,0 +1,61 @@
+﻿<div id="map-container">
+    @using Newtonsoft.Json
+
+    @{
+        ViewData["Title"] = "Map";
+        var coworkingSpaces = ViewBag.results as IEnumerable<coworking_spaces.Models.Result>;
+    }
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <div id="map" class="w-100 border border-2 border border-dark rounded-3" style="height: 30rem;"></div>
+
+    @if (ViewBag.Error != null)
+    {
+        <p style="color:red">@ViewBag.Error</p>
+    }
+
+    <script>
+        // Inizializza la mappa
+        var map = L.map('map').setView([-37.8086, 144.9631], 14); // Coordinate modificate per spostare la visuale leggermente meno in alto
+
+        // Aggiungi il layer Stadia.OSMBright
+        var Stadia_OSMBright = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.{ext}', {
+            minZoom: 8,
+            maxZoom: 20,
+            attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            ext: 'png'
+        }).addTo(map);
+
+        // Dati degli spazi di coworking (serializzati dal ViewBag)
+        var coworkingSpaces = @Html.Raw(JsonConvert.SerializeObject(coworkingSpaces));
+
+        // Aggiungi marker per ogni coworking space
+        coworkingSpaces.forEach(space => {
+            // Usa le coordinate di 'geopoint' se presenti, altrimenti 'latitude' e 'longitude'
+            let lat = space.geopoint ? space.geopoint.lat : space.latitude;
+            let lon = space.geopoint ? space.geopoint.lon : space.longitude;
+
+            if (lat && lon) {
+                var redMarkerLogo = L.icon({
+                    iconUrl: '/images/markers/redMarkerLogo.png',
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 32],
+                    popupAnchor: [0, -32]
+                });
+
+                var marker = L.marker([lat, lon], { icon: redMarkerLogo })
+                    .bindPopup(`
+                        <div>
+                            <h3>${space.organisation}</h3>
+                            <p>${space.address || 'Indirizzo non disponibile'}</p>
+                            <a href="${space.website}" target="_blank">Visita il sito</a>
+                        </div>
+                    `);
+
+                marker.addTo(map);
+            }
+        });
+    </script>
+</div>

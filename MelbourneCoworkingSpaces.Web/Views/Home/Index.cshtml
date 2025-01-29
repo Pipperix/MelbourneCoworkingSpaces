@@ -1,0 +1,133 @@
+﻿@{
+    ViewData["Title"] = "Home";
+    var organisations = ViewBag.organisations as List<string>;
+    var resultsList = ViewBag.results as List<coworking_spaces.Models.Result>;
+    int pageSize = 12;
+    int pageNumber = ViewBag.PageNumber ?? 1;
+    int totalPages = resultsList != null ? (int)Math.Ceiling((double)ViewBag.totalCount / pageSize) : 0;
+    var paginatedResults = resultsList != null ? resultsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList() : new
+    List<coworking_spaces.Models.Result>();
+}
+
+@if (ViewBag.Error != null)
+{
+    <p style="color:red">@ViewBag.Error</p>
+}
+
+<section class="d-flex flex-column align-items-center justify-content-center">
+    <div class="row w-100">
+        <div class="col-9">
+            @* Barra di ricerca *@
+            <div class="row mb-4">
+                <div class="col-12 d-flex justify-content-center">
+                    <form id="searchForm" method="get" action="/" class="input-group rounded-3">
+                        <input type="text" name="searchQuery" placeholder="Cerca..." class="form-control"
+                            value="@ViewBag.SearchQuery" />
+                        <input type="hidden" name="organisationFilter" value="@ViewBag.SelectedOrganisation" />
+                        <button type="submit" class="btn btn-outline-success"><i class="bi bi-search"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            @* Spazi di coworking *@
+            <div class="row row-cols-3 row-cols-xl-4 g-4">
+                @if (paginatedResults.Any())
+                {
+                    @foreach (var space in paginatedResults)
+                    {
+                        <div class="col">
+                            <div class="card overflow-hidden" style="height: 9.5rem;">
+                                @* <img src="images/markers/redMarkerLogo.png" class="card-img-top w-25" alt="Coworking Space"> *@
+                                <div class="card-body">
+                                    <h5 class="card-title d-flex justify-content-between align-items-center">
+                                        @space.organisation
+                                        <a href="@space.website" target="_blank"
+                                            class="btn btn-link d-flex justify-content-center align-items-center"
+                                            style="width: 2rem; height: 2rem;">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    </h5>
+                                    <p class="card-text small">@space.address</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Nessun spazio di coworking trovato.</p>
+                }
+            </div>
+
+            @* Paginazione *@
+            @if (totalPages > 1 && paginatedResults.Any())
+            {
+                <nav class="mt-4" aria-label="Page navigation">
+                    <ul class="pagination justify-content-center mb-0">
+                        <li class="page-item @(pageNumber == 1 ? "disabled" : "")">
+                            <a class="page-link"
+                                href="?pageNumber=@(pageNumber - 1)&searchQuery=@ViewBag.SearchQuery&organisationFilter=@ViewBag.SelectedOrganisation">
+                                <i class="bi bi-caret-left-fill"></i>
+                            </a>
+                        </li>
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            @if (resultsList.Skip((i - 1) * pageSize).Take(pageSize).Any())
+                            {
+                                <li class="page-item @(pageNumber == i ? "active" : "")">
+                                    <a class="page-link"
+                                        href="?pageNumber=@i&searchQuery=@ViewBag.SearchQuery&organisationFilter=@ViewBag.SelectedOrganisation">@i</a>
+                                </li>
+                            }
+                        }
+                        <li class="page-item @(pageNumber == totalPages ? "disabled" : "")">
+                            <a class="page-link"
+                                href="?pageNumber=@(pageNumber + 1)&searchQuery=@ViewBag.SearchQuery&organisationFilter=@ViewBag.SelectedOrganisation">
+                                <i class="bi bi-caret-right-fill"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        </div>
+
+        @* Filtri *@
+        <div class="col-3">
+            <div class="card">
+                <h5 class="card-header d-flex justify-content-between align-items-center">
+                    Organizzazioni
+                    <button type="submit" form="filterForm" class="btn btn-success px-3">Filtra</button>
+                </h5>
+                <div class="card-body" style="overflow-y: auto; max-height: 73vh;">
+                    <form id="filterForm" method="get" action="/">
+                        <input type="hidden" name="searchQuery" value="@ViewBag.SearchQuery" />
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="organisationFilter" id="all" value=""
+                            @(string.IsNullOrEmpty(ViewBag.SelectedOrganisation) ? "checked" : "")>
+                            <label class="form-check-label" for="all">
+                                Tutte
+                            </label>
+                        </div>
+                        <hr>
+                        @foreach (var organisation in organisations)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="organisationFilter" id="@organisation"
+                                    value="@organisation" @(ViewBag.SelectedOrganisation == organisation ? "checked" : "")>
+                                <label class="form-check-label d-block" for="@organisation">
+                                    @organisation
+                                </label>
+                            </div>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="d-flex align-items-center">
+    <div class="container text-center">
+        <h1 class="mb-4"><strong>Coworking Spaces</strong> - Melbourne</h1>
+        @await Html.PartialAsync("Map")
+    </div>
+</section>
