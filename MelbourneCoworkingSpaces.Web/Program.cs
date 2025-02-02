@@ -1,7 +1,14 @@
+using MelbourneCoworkingSpaces.Web.ServizioSOAP;
+using SoapCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Aggiunto servizio SoapCore
+builder.Services.AddSoapCore();
+builder.Services.AddScoped<ISoapService, SoapService>();
 
 var app = builder.Build();
 
@@ -24,15 +31,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Definizione endpoint wsdl
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapControllers();
-    // Posso cambiare il nome dell'endpoint
-    endpoints.MapGet("/api", async context =>
-    {
-        // Esempio di chiamata diretta al controller
-        context.Response.Redirect("/api/Soap/fetch-data");
-    });
+    endpoints.UseSoapEndpoint<ISoapService>("/Service.wsdl", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
 });
 
 app.Run();

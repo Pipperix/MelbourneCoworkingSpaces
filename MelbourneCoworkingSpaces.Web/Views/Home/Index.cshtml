@@ -5,8 +5,7 @@
     int pageSize = 12;
     int pageNumber = ViewBag.PageNumber ?? 1;
     int totalPages = resultsList != null ? (int)Math.Ceiling((double)ViewBag.totalCount / pageSize) : 0;
-    var paginatedResults = resultsList != null ? resultsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList() : new
-    List<coworking_spaces.Models.Result>();
+    var paginatedResults = resultsList != null ? resultsList.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList() : new List<coworking_spaces.Models.Result>();
 }
 
 @if (ViewBag.Error != null)

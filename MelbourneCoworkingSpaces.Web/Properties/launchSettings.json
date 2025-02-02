@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "coworking_spaces": {
+    "coworking-spaces": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

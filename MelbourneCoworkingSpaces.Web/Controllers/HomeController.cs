@@ -1,4 +1,5 @@
 ﻿using coworking_spaces.Models;
+using MelbourneCoworkingSpaces.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Xml;
@@ -8,29 +9,12 @@ namespace coworking_spaces.Controllers
     public class HomeController : Controller
     {
 
-        // Da capire
-        public HomeController() { }
-
-        // ???
-        private async Task<Rootobject> FetchCoworkingSpacesAsync()
-        {
-            string BaseUri = "https://data.melbourne.vic.gov.au/api/explore/v2.1/catalog/datasets/coworking-spaces/records?limit=100";
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync(BaseUri);
-
-            if (!response.IsSuccessStatusCode)
-                throw new HttpRequestException($"Errore API: {response.StatusCode}");
-
-            string contents = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<Rootobject>(contents);
-        }
-
         // Home Coworking Spaces
         public async Task<IActionResult> Index(string searchQuery = null, string organisationFilter = null, int pageNumber = 1)
         {
             try
             {
-                var coworkingSpaces = await FetchCoworkingSpacesAsync();
+                var coworkingSpaces = await CoworkingSpacesServices.FetchCoworkingSpacesAsync();
                 ViewBag.totalCount = coworkingSpaces.total_count;
                 ViewBag.PageNumber = pageNumber;
 
@@ -76,7 +60,7 @@ namespace coworking_spaces.Controllers
         {
             try
             {
-                var coworkingSpaces = await FetchCoworkingSpacesAsync();
+                var coworkingSpaces = await CoworkingSpacesServices.FetchCoworkingSpacesAsync();
                 ViewBag.totalCount = coworkingSpaces.total_count;
                 ViewBag.results = coworkingSpaces.results;
 
