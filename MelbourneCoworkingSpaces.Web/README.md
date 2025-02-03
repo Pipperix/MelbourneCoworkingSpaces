@@ -25,8 +25,8 @@ progetto è stato successivamente containerizzato utilizzando Docker.
 - **Models:** Contiene le classi che rappresentano i dati dei coworking spaces.
 - **Views:** Contiene i file Razor (.cshtml) dell'interfaccia web.
 - **Controllers:** Contiene i controller per gestire le richieste HTTP, elabora i dati tramite i modelli e restituisce le viste appropriate.
-- **Services:** Contiene i servizi per il recupero e la gestione dei dati. (qui c’è da dire che usiamo le API??)
-- **ServizioSOAP:** Implementa il servizio SOAP con i metodi GetAllData (mostra tutti i coworking spaces), GetFilteredData (mostra solamente i coworking spaces che corrispondono a quello cercato), GetDataLimit (mostra un numero limitato di coworking spaces).
+- **Services:** Contiene i servizi per il recupero e la gestione dei dati
+- **ServizioSOAP:** Implementa il servizio SOAP con i metodi **GetAllData** (mostra tutti i coworking spaces), **GetFilteredData** (mostra solamente i coworking spaces che corrispondono a quello cercato), **GetDataLimit** (mostra un numero limitato di coworking spaces).
 - **wwwroot:** Contiene file statici come CSS, JavaScript e il file JSON dei coworking spaces.
 - **appsettings.json:** Configurazioni del progetto.
 - **Dockerfile:** File per la creazione dell'immagine Docker.
