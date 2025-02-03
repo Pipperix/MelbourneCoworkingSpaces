@@ -10,16 +10,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["coworking-spaces.csproj", "."]
-RUN dotnet restore "./coworking-spaces.csproj"
+COPY ["MelbourneCoworkingSpaces.Web.csproj", "."]
+RUN dotnet restore "./MelbourneCoworkingSpaces.Web.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "coworking-spaces.csproj" -c Release -o /app/build
+RUN dotnet build "MelbourneCoworkingSpaces.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "coworking-spaces.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "MelbourneCoworkingSpaces.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "coworking-spaces.dll"]
+ENTRYPOINT ["dotnet", "MelbourneCoworkingSpaces.Web.dll"]
