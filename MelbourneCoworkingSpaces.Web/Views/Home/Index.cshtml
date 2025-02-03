@@ -29,9 +29,9 @@
             </div>
 
             @* Spazi di coworking *@
-            <div class="row row-cols-3 row-cols-xl-4 g-4">
-                @if (paginatedResults.Any())
-                {
+            @if (paginatedResults.Any())
+            {
+                <div class="row row-cols-3 row-cols-xl-4 g-4">
                     @foreach (var space in paginatedResults)
                     {
                         <div class="col">
@@ -51,12 +51,14 @@
                             </div>
                         </div>
                     }
-                }
-                else
-                {
-                    <p>Nessun spazio di coworking trovato.</p>
-                }
-            </div>
+                </div>
+            }
+            else
+            {
+                <div id="noResults" class="text-center" data-search-query="@ViewBag.SearchQuery">
+                    <p>Nessuno spazio di coworking trovato.</p>
+                </div>
+            }
 
             @* Paginazione *@
             @if (totalPages > 1 && paginatedResults.Any())
@@ -97,7 +99,7 @@
                     Organizzazioni
                     <button type="submit" form="filterForm" class="btn btn-success px-3">Filtra</button>
                 </h5>
-                <div class="card-body" style="overflow-y: auto; max-height: 73vh;">
+                <div class="card-body" style="overflow-y: auto; max-height: 32rem;">
                     <form id="filterForm" method="get" action="/">
                         <input type="hidden" name="searchQuery" value="@ViewBag.SearchQuery" />
                         <div class="form-check">
