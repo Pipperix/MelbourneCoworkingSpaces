@@ -2,14 +2,7 @@
    
    # Melbourne Coworking Spaces
    
-   “Melbourne Coworking Spaces” è un progetto MVC sviluppato in .NET 6 con Visual Studio,
-   che permette di recuperare i dati da un file JSON contenente una lista di spazi di coworking
-   situati a Melbourne. I dati vengono visualizzati in un'interfaccia web che offre funzionalità
-   di ricerca e filtro per facilitare la consultazione. Inoltre, è stato implementato un servizio
-   SOAP (creato con l'utilizzo della libreria SoapCore) che consente di visualizzare la lista dei
-   coworking spaces in formato XML.
-   Per garantire una distribuzione e un'esecuzione consistenti su qualsiasi ambiente, il 
-   progetto è stato successivamente containerizzato utilizzando Docker.
+   “Melbourne Coworking Spaces” è un progetto MVC sviluppato in .NET 6 con Visual Studio, che permette di recuperare i dati da un file JSON contenente una lista di spazi di coworking situati a Melbourne. I dati vengono visualizzati in un'interfaccia web che offre funzionalità di ricerca e filtro per facilitare la consultazione. Inoltre, è stato implementato un servizio SOAP (creato con l'utilizzo della libreria SoapCore) che consente di visualizzare la lista dei coworking spaces in formato XML. Per garantire una distribuzione e un'esecuzione consistenti su qualsiasi ambiente, il progetto è stato successivamente containerizzato utilizzando Docker.
    
    ## 🚀 Funzionalità
    - 🔎 **Visualizzazione dei Coworking Spaces:** Mostra una lista di tutti i coworking spaces di Melbourne e il loro posizionamento nella mappa (OSM).
