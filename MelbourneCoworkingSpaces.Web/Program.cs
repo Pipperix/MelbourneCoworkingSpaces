@@ -1,4 +1,4 @@
-using MelbourneCoworkingSpaces.Web.ServizioSOAP;
+using coworking_spaces.ServizioSOAP;
 using SoapCore;
 
 var builder = WebApplication.CreateBuilder(args);
